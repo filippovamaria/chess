@@ -26,16 +26,26 @@
     function isTurnPossible(figure, startPlaceOnBoard, targetPlaceOnBoard) {
         const figures = ["king", "queen", "rook", "elephant", "horse", "pawn"]
 
-        if (figure.toLowerCase() === "pawn") {
-            return isPossibleMoveForPawn(startPlaceOnBoard.toLowerCase(), targetPlaceOnBoard.toLowerCase())
+        switch (figure.toLowerCase()) {
+            case "pawn":
+                return isPossibleMoveForPawn(startPlaceOnBoard.toLowerCase(), targetPlaceOnBoard.toLowerCase())
+                break
+            case "king":
+                return isPossibleMoveForKing(startPlaceOnBoard.toLowerCase(), targetPlaceOnBoard.toLowerCase())
+                break
+            case "queen":
+                return isPossibleMoveForQueen(startPlaceOnBoard.toLowerCase(), targetPlaceOnBoard.toLowerCase())
+                break
+            case "rook":
+                return isPossibleMoveForRook(startPlaceOnBoard.toLowerCase(), targetPlaceOnBoard.toLowerCase())
+                break
+            case "elephant":
+                return isPossibleMoveForElephant(startPlaceOnBoard.toLowerCase(), targetPlaceOnBoard.toLowerCase())
+                break
+            case "horse":
+                return isPossibleMoveForHorse(startPlaceOnBoard.toLowerCase(), targetPlaceOnBoard.toLowerCase())
+                break
         }
-
-        if (figure.toLowerCase() === "king") {
-            return isPossibleMoveForKing(startPlaceOnBoard.toLowerCase(), targetPlaceOnBoard.toLowerCase())
-        }
-
-
-        console.log("false")
     }
 
     function isPossibleMoveForPawn(startPlaceOnBoard, targetPlaceOnBoard) {
@@ -72,17 +82,79 @@
         return false
     }
 
-    // console.log(isTurnPossible("king", "C8", "c8")) // false БАГ
-    // console.log(isTurnPossible("king", "d5", "d6")) // true
-    // console.log(isTurnPossible("king", "d5", "d7")) // false
-    // console.log(isTurnPossible("king", "d5", "d4")) // true
-    // console.log(isTurnPossible("king", "d5", "d3")) // false
-    // console.log(isTurnPossible("king", "d5", "c6")) // true
-    // console.log(isTurnPossible("king", "d5", "e5")) // true
-    // console.log(isTurnPossible("king", "d5", "c5")) // true
-    // console.log(isTurnPossible("king", "d5", "e6")) // true
-    // console.log(isTurnPossible("king", "d5", "c4")) // true
-    // console.log(isTurnPossible("king", "d5", "e4")) // true
+    function isPossibleMoveForQueen(startPlaceOnBoard, targetPlaceOnBoard) {
+
+        const startPlaceOnBoardSplit = startPlaceOnBoard.split("")
+        const targetPlaceOnBoardSplit = targetPlaceOnBoard.split("")
+        const moduleOfGorizontalField = Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1])))
+        const moduleOfVerticalField = Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]])
+
+        if (startPlaceOnBoard === targetPlaceOnBoard) {
+            return false
+        }
+
+        if ((startPlaceOnBoardSplit[0] === targetPlaceOnBoardSplit[0]) ||
+            (startPlaceOnBoardSplit[1] === targetPlaceOnBoardSplit[1]) ||
+            (moduleOfGorizontalField === moduleOfVerticalField)) {
+            return true
+        }
+
+        return false
+    }
+
+    function isPossibleMoveForRook(startPlaceOnBoard, targetPlaceOnBoard) {
+        const startPlaceOnBoardSplit = startPlaceOnBoard.split("")
+        const targetPlaceOnBoardSplit = targetPlaceOnBoard.split("")
+        const moduleOfGorizontalField = Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1])))
+        const moduleOfVerticalField = Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]])
+
+        if (startPlaceOnBoard === targetPlaceOnBoard) {
+            return false
+        }
+
+        if ((startPlaceOnBoardSplit[0] === targetPlaceOnBoardSplit[0]) ||
+            (startPlaceOnBoardSplit[1] === targetPlaceOnBoardSplit[1])) {
+            return true
+        }
+
+        return false
+    }
+
+    function isPossibleMoveForElephant(startPlaceOnBoard, targetPlaceOnBoard) {
+        const startPlaceOnBoardSplit = startPlaceOnBoard.split("")
+        const targetPlaceOnBoardSplit = targetPlaceOnBoard.split("")
+        const moduleOfGorizontalField = Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1])))
+        const moduleOfVerticalField = Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]])
+
+        if (startPlaceOnBoard === targetPlaceOnBoard) {
+            return false
+        }
+
+        if (moduleOfGorizontalField === moduleOfVerticalField) {
+            return true
+        }
+
+        return false
+    }
+
+    function isPossibleMoveForHorse(startPlaceOnBoard, targetPlaceOnBoard) {
+        const startPlaceOnBoardSplit = startPlaceOnBoard.split("")
+        const targetPlaceOnBoardSplit = targetPlaceOnBoard.split("")
+        const moduleOfGorizontalField = Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1])))
+        const moduleOfVerticalField = Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]])
+
+        if (startPlaceOnBoard === targetPlaceOnBoard) {
+            return false
+        }
+
+        if ((moduleOfVerticalField === 1 && moduleOfGorizontalField === 2) ||
+            (moduleOfVerticalField === 2 && moduleOfGorizontalField === 1)) {
+            return true
+        }
+
+        return false
+    }
+
 </script>
 
 </html>
