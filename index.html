@@ -23,78 +23,65 @@
         "g": 7,
         "h": 8
     }
-    function isTurnPossible(figure, startPlaceOnBoard, targetPlaceOnBoard) {
-        const figures = ["king", "queen", "rook", "elephant", "horse", "pawn"]
+    const lettersOfFields = ["a", "b", "c", "d", "e", "f", "g", "h"]
 
-        switch (figure.toLowerCase()) {
-            case "pawn":
-                return isPossibleMoveForPawn(startPlaceOnBoard.toLowerCase(), targetPlaceOnBoard.toLowerCase())
-                break
-            case "king":
-                return isPossibleMoveForKing(startPlaceOnBoard.toLowerCase(), targetPlaceOnBoard.toLowerCase())
-                break
-            case "queen":
-                return isPossibleMoveForQueen(startPlaceOnBoard.toLowerCase(), targetPlaceOnBoard.toLowerCase())
-                break
-            case "rook":
-                return isPossibleMoveForRook(startPlaceOnBoard.toLowerCase(), targetPlaceOnBoard.toLowerCase())
-                break
-            case "elephant":
-                return isPossibleMoveForElephant(startPlaceOnBoard.toLowerCase(), targetPlaceOnBoard.toLowerCase())
-                break
-            case "horse":
-                return isPossibleMoveForHorse(startPlaceOnBoard.toLowerCase(), targetPlaceOnBoard.toLowerCase())
-                break
+    function isTurnPossible(figure, startPlaceOnBoard, targetPlaceOnBoard) {
+        const startPlaceOnBoardSplit = startPlaceOnBoard.toLowerCase().split("")
+        const targetPlaceOnBoardSplit = targetPlaceOnBoard.toLowerCase().split("")
+        const moduleOfGorizontalField = Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1])))
+        const moduleOfVerticalField = Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]])
+
+        if (!lettersOfFields.includes(startPlaceOnBoardSplit[0]) ||
+            (!lettersOfFields.includes(targetPlaceOnBoardSplit[0])) ||
+            (startPlaceOnBoardSplit[1] > 8) ||
+            (targetPlaceOnBoardSplit[1] > 8)) {
+            console.log("Нет такого поля")
+            return
         }
+
+        const figuresMoves = {
+            "pawn": isPossibleMoveForPawn,
+            "king": isPossibleMoveForKing,
+            "queen": isPossibleMoveForQueen,
+            "rook": isPossibleMoveForRook,
+            "elephant": isPossibleMoveForElephant,
+            "horse": isPossibleMoveForHorse
+        }
+
+        return figuresMoves[figure](startPlaceOnBoardSplit, targetPlaceOnBoardSplit, moduleOfGorizontalField, moduleOfVerticalField)
     }
 
-    function isPossibleMoveForPawn(startPlaceOnBoard, targetPlaceOnBoard) {
+    function isPossibleMoveForPawn(startPlaceOnBoard, targetPlaceOnBoard, moduleOfGorizontalField, moduleOfVerticalField) {
 
-        const startPlaceOnBoardSplit = startPlaceOnBoard.split("")
-        const targetPlaceOnBoardSplit = targetPlaceOnBoard.split("")
-
-        if (Number(startPlaceOnBoardSplit[1]) > 8) {
+        if (Number(startPlaceOnBoard[1]) > 8) {
             return false
         }
-        if ((Number(startPlaceOnBoardSplit[1]) + 1 === Number(targetPlaceOnBoardSplit[1])) &&
-            (startPlaceOnBoardSplit[0] === targetPlaceOnBoardSplit[0])) {
+        if ((Number(startPlaceOnBoard[1]) + 1 === Number(targetPlaceOnBoard[1])) &&
+            (startPlaceOnBoard[0] === targetPlaceOnBoard[0])) {
             return true
         }
 
         return false
     }
 
-    function isPossibleMoveForKing(startPlaceOnBoard, targetPlaceOnBoard) {
+    function isPossibleMoveForKing(startPlaceOnBoard, targetPlaceOnBoard, moduleOfGorizontalField, moduleOfVerticalField) {
 
-        const startPlaceOnBoardSplit = startPlaceOnBoard.split("")
-        const targetPlaceOnBoardSplit = targetPlaceOnBoard.split("")
-        const moduleOfGorizontalField = Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1])))
-        const moduleOfVerticalField = Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]])
-
-        if ((moduleOfGorizontalField === 1) && (moduleOfVerticalField === 1)
-            ||
-            ((moduleOfGorizontalField === 1) && (moduleOfVerticalField === 0))
-            ||
-            ((moduleOfGorizontalField === 0) && (moduleOfVerticalField === 1))) {
-            return true
+        if (targetPlaceOnBoard === startPlaceOnBoard) {
+            return false
         }
 
-        return false
+        const possibleDiff = [0, 1];
+        return possibleDiff.includes(moduleOfGorizontalField) && possibleDiff.includes(moduleOfVerticalField)
     }
 
-    function isPossibleMoveForQueen(startPlaceOnBoard, targetPlaceOnBoard) {
-
-        const startPlaceOnBoardSplit = startPlaceOnBoard.split("")
-        const targetPlaceOnBoardSplit = targetPlaceOnBoard.split("")
-        const moduleOfGorizontalField = Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1])))
-        const moduleOfVerticalField = Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]])
+    function isPossibleMoveForQueen(startPlaceOnBoard, targetPlaceOnBoard, moduleOfGorizontalField, moduleOfVerticalField) {
 
         if (startPlaceOnBoard === targetPlaceOnBoard) {
             return false
         }
 
-        if ((startPlaceOnBoardSplit[0] === targetPlaceOnBoardSplit[0]) ||
-            (startPlaceOnBoardSplit[1] === targetPlaceOnBoardSplit[1]) ||
+        if ((startPlaceOnBoard[0] === targetPlaceOnBoard[0]) ||
+            (startPlaceOnBoard[1] === targetPlaceOnBoard[1]) ||
             (moduleOfGorizontalField === moduleOfVerticalField)) {
             return true
         }
@@ -102,29 +89,21 @@
         return false
     }
 
-    function isPossibleMoveForRook(startPlaceOnBoard, targetPlaceOnBoard) {
-        const startPlaceOnBoardSplit = startPlaceOnBoard.split("")
-        const targetPlaceOnBoardSplit = targetPlaceOnBoard.split("")
-        const moduleOfGorizontalField = Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1])))
-        const moduleOfVerticalField = Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]])
+    function isPossibleMoveForRook(startPlaceOnBoard, targetPlaceOnBoard, moduleOfGorizontalField, moduleOfVerticalField) {
 
         if (startPlaceOnBoard === targetPlaceOnBoard) {
             return false
         }
 
-        if ((startPlaceOnBoardSplit[0] === targetPlaceOnBoardSplit[0]) ||
-            (startPlaceOnBoardSplit[1] === targetPlaceOnBoardSplit[1])) {
+        if ((startPlaceOnBoard[0] === targetPlaceOnBoard[0]) ||
+            (startPlaceOnBoard[1] === targetPlaceOnBoard[1])) {
             return true
         }
 
         return false
     }
 
-    function isPossibleMoveForElephant(startPlaceOnBoard, targetPlaceOnBoard) {
-        const startPlaceOnBoardSplit = startPlaceOnBoard.split("")
-        const targetPlaceOnBoardSplit = targetPlaceOnBoard.split("")
-        const moduleOfGorizontalField = Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1])))
-        const moduleOfVerticalField = Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]])
+    function isPossibleMoveForElephant(startPlaceOnBoard, targetPlaceOnBoard, moduleOfGorizontalField, moduleOfVerticalField) {
 
         if (startPlaceOnBoard === targetPlaceOnBoard) {
             return false
@@ -137,24 +116,18 @@
         return false
     }
 
-    function isPossibleMoveForHorse(startPlaceOnBoard, targetPlaceOnBoard) {
-        const startPlaceOnBoardSplit = startPlaceOnBoard.split("")
-        const targetPlaceOnBoardSplit = targetPlaceOnBoard.split("")
-        const moduleOfGorizontalField = Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1])))
-        const moduleOfVerticalField = Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]])
+    function isPossibleMoveForHorse(startPlaceOnBoard, targetPlaceOnBoard, moduleOfGorizontalField, moduleOfVerticalField) {
 
         if (startPlaceOnBoard === targetPlaceOnBoard) {
             return false
         }
 
-        if ((moduleOfVerticalField === 1 && moduleOfGorizontalField === 2) ||
-            (moduleOfVerticalField === 2 && moduleOfGorizontalField === 1)) {
-            return true
-        }
-
-        return false
+        const possibleDiff = [1, 2];
+        return possibleDiff.includes(moduleOfGorizontalField) && possibleDiff.includes(moduleOfVerticalField)
     }
 
+
+    console.log(isTurnPossible("horse", "h1", "h8"))
 </script>
 
 </html>
