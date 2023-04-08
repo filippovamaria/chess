@@ -58,13 +58,14 @@
 
         const startPlaceOnBoardSplit = startPlaceOnBoard.split("")
         const targetPlaceOnBoardSplit = targetPlaceOnBoard.split("")
+        const moduleOfGorizontalField = Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1])))
+        const moduleOfVerticalField = Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]])
 
-        if ((Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1]))) === 1) ||
-            (Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1]))) === 0)
-            &&
-            ((Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]]) === 1) ||
-                (Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]]) === 0))
-        ) {
+        if ((moduleOfGorizontalField === 1) && (moduleOfVerticalField === 1)
+            ||
+            ((moduleOfGorizontalField === 1) && (moduleOfVerticalField === 0))
+            ||
+            ((moduleOfGorizontalField === 0) && (moduleOfVerticalField === 1))) {
             return true
         }
 
