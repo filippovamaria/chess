@@ -21,7 +21,7 @@
         "e": 5,
         "f": 6,
         "g": 7,
-        "h": 7
+        "h": 8
     }
     function isTurnPossible(figure, startPlaceOnBoard, targetPlaceOnBoard) {
         const figures = ["king", "queen", "rook", "elephant", "horse", "pawn"]
@@ -59,39 +59,19 @@
         const startPlaceOnBoardSplit = startPlaceOnBoard.split("")
         const targetPlaceOnBoardSplit = targetPlaceOnBoard.split("")
 
-        if (((Number(startPlaceOnBoardSplit[1]) + 1 === Number(targetPlaceOnBoardSplit[1])) &&
-            (startPlaceOnBoardSplit[0] === targetPlaceOnBoardSplit[0])) 
-            ||
-            ((Number(startPlaceOnBoardSplit[1])  === Number(targetPlaceOnBoardSplit[1]) + 1) &&
-            (startPlaceOnBoardSplit[0] === targetPlaceOnBoardSplit[0]))
-            || 
-            ((Number(startPlaceOnBoardSplit[1])  === Number(targetPlaceOnBoardSplit[1])) &&
-            (alphabet[startPlaceOnBoardSplit[0]] + 1 === alphabet[targetPlaceOnBoardSplit[0]])) 
-            ||
-            ((Number(startPlaceOnBoardSplit[1])  === Number(targetPlaceOnBoardSplit[1])) &&
-            (alphabet[startPlaceOnBoardSplit[0]]  === alphabet[targetPlaceOnBoardSplit[0]] + 1)
-            )
-            ||
-            ((Number(startPlaceOnBoardSplit[1]) + 1 === Number(targetPlaceOnBoardSplit[1])) &&
-            (alphabet[startPlaceOnBoardSplit[0]] + 1 === alphabet[targetPlaceOnBoardSplit[0]]))
-            ||
-            ((Number(startPlaceOnBoardSplit[1]) + 1 === Number(targetPlaceOnBoardSplit[1])) &&
-            (alphabet[startPlaceOnBoardSplit[0]] === alphabet[targetPlaceOnBoardSplit[0]] + 1))
-            || 
-            ((Number(startPlaceOnBoardSplit[1])  === Number(targetPlaceOnBoardSplit[1]) + 1) &&
-            (alphabet[startPlaceOnBoardSplit[0]] + 1 === alphabet[targetPlaceOnBoardSplit[0]]))
-            ||
-            ((Number(startPlaceOnBoardSplit[1]) === Number(targetPlaceOnBoardSplit[1]) + 1) &&
-            (alphabet[startPlaceOnBoardSplit[0]] === alphabet[targetPlaceOnBoardSplit[0]] + 1))
-            ) 
-            {
-                return true
+        if ((Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1]))) === 1) ||
+            (Math.abs((Number(startPlaceOnBoardSplit[1]) - Number(targetPlaceOnBoardSplit[1]))) === 0)
+            &&
+            ((Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]]) === 1) ||
+                (Math.abs(alphabet[startPlaceOnBoardSplit[0]] - alphabet[targetPlaceOnBoardSplit[0]]) === 0))
+        ) {
+            return true
         }
 
         return false
     }
 
-    // console.log(isTurnPossible("king", "C8", "c8")) // false
+    // console.log(isTurnPossible("king", "C8", "c8")) // false БАГ
     // console.log(isTurnPossible("king", "d5", "d6")) // true
     // console.log(isTurnPossible("king", "d5", "d7")) // false
     // console.log(isTurnPossible("king", "d5", "d4")) // true
