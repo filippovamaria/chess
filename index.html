@@ -23,21 +23,9 @@
         "g": 7,
         "h": 8
     }
-    const lettersOfFields = Object.keys(alphabet)
+    const fieldsLetters = Object.keys(alphabet)
 
     function isTurnPossible(figure, startPlaceOnBoard, targetPlaceOnBoard) {
-
-        const [startLetterCoord, startNumberCoord] = startPlaceOnBoard.toLowerCase();
-        const [targetLetterCoord, targetNumberCoord] = targetPlaceOnBoard.toLowerCase();
-        const moduleOfGorizontalField = Math.abs(startNumberCoord - targetNumberCoord)
-        const moduleOfVerticalField = Math.abs(alphabet[startLetterCoord] - alphabet[targetLetterCoord])
-
-        validatePlaceCoord([startLetterCoord, startNumberCoord])
-        validatePlaceCoord([targetLetterCoord, targetNumberCoord])
-
-        if ([startLetterCoord, startNumberCoord] === [targetLetterCoord, targetNumberCoord]) {
-            return false
-        }
 
         const figureNameToCheckMovePossibilityFunctionMap = {
             "pawn": isPossibleMoveForPawn,
@@ -47,65 +35,97 @@
             "elephant": isPossibleMoveForElephant,
             "horse": isPossibleMoveForHorse
         }
+        const [startLetterCoord, startNumberCoord] = startPlaceOnBoard.toLowerCase();
+        const [targetLetterCoord, targetNumberCoord] = targetPlaceOnBoard.toLowerCase();
+        const isMovePossible = figureNameToCheckMovePossibilityFunctionMap[figure]
 
-        return figureNameToCheckMovePossibilityFunctionMap[figure]([startLetterCoord, Number(startNumberCoord)], [targetLetterCoord, Number(targetNumberCoord)], [moduleOfGorizontalField, moduleOfVerticalField])
+        validatePlaceCoord([startLetterCoord, startNumberCoord])
+        validatePlaceCoord([targetLetterCoord, targetNumberCoord])
+
+        if ((startLetterCoord === targetLetterCoord) &&
+            (startNumberCoord === targetLetterCoord)) {
+            throw new Error("нельзя не совершать ход")
+        }
+
+        const possibleMoveCalculations = {
+            startLetterCoord,
+            startNumberCoord: Number(startNumberCoord),
+            targetLetterCoord,
+            targetNumberCoord: Number(targetNumberCoord),
+            moduleOfGorizontalField: Math.abs(alphabet[startLetterCoord] - alphabet[targetLetterCoord]),
+            moduleOfVerticalField: Math.abs(alphabet[startLetterCoord] - alphabet[targetLetterCoord])
+        }
+
+        return isMovePossible(possibleMoveCalculations)
     }
 
-    function isPossibleMoveForPawn([startLetterCoord, startNumberCoord], [targetLetterCoord, targetNumberCoord], [moduleOfGorizontalField, moduleOfVerticalField]) {
+    function isPossibleMoveForPawn({ startLetterCoord, 
+                                     startNumberCoord, 
+                                     targetLetterCoord,
+                                     targetNumberCoord,
+                                     moduleOfGorizontalField,
+                                     moduleOfVerticalField }) {
 
-        const possibleMove = startNumberCoord + 1
+        const possibleMoveForwardByNumberCoord = startNumberCoord + 1
 
-        if (startNumberCoord === 8) { 
+        if (startNumberCoord === 8) {
             return false
         }
-        
-        if ((possibleMove === targetNumberCoord) &&
-            (startLetterCoord === targetLetterCoord)) {
-            return true
-        }
 
-        return false
+        return possibleMoveForwardByNumberCoord === targetNumberCoord && startLetterCoord === targetLetterCoord
     }
 
-    function isPossibleMoveForKing([startLetterCoord, startNumberCoord], [targetLetterCoord, targetNumberCoord], [moduleOfGorizontalField, moduleOfVerticalField]) {
+    function isPossibleMoveForKing({ startLetterCoord, 
+                                     startNumberCoord, 
+                                     targetLetterCoord,
+                                     targetNumberCoord,
+                                     moduleOfGorizontalField,
+                                     moduleOfVerticalField }) {
 
         const possibleDiff = [0, 1];
         return possibleDiff.includes(moduleOfGorizontalField) && possibleDiff.includes(moduleOfVerticalField)
     }
 
-    function isPossibleMoveForQueen([startLetterCoord, startNumberCoord], [targetLetterCoord, targetNumberCoord], [moduleOfGorizontalField, moduleOfVerticalField]) {
+    function isPossibleMoveForQueen({ startLetterCoord, 
+                                      startNumberCoord, 
+                                      targetLetterCoord,
+                                      targetNumberCoord,
+                                      moduleOfGorizontalField,
+                                      moduleOfVerticalField }) {
 
-        return isPossibleMoveForRook([startLetterCoord, startNumberCoord], [targetLetterCoord, targetNumberCoord], [moduleOfGorizontalField, moduleOfVerticalField]) ||
-               isPossibleMoveForElephant([startLetterCoord, startNumberCoord], [targetLetterCoord, targetNumberCoord], [moduleOfGorizontalField, moduleOfVerticalField])
+        return isPossibleMoveForRook({ startLetterCoord, startNumberCoord, targetLetterCoord, targetNumberCoord, moduleOfGorizontalField, moduleOfVerticalField }) ||
+               isPossibleMoveForElephant({ startLetterCoord, startNumberCoord, targetLetterCoord, targetNumberCoord, moduleOfGorizontalField, moduleOfVerticalField })
     }
 
-    function isPossibleMoveForRook([startLetterCoord, startNumberCoord], [targetLetterCoord, targetNumberCoord], [moduleOfGorizontalField, moduleOfVerticalField]) {
+    function isPossibleMoveForRook({ startLetterCoord, 
+                                     startNumberCoord, 
+                                     targetLetterCoord,
+                                     targetNumberCoord,
+                                     moduleOfGorizontalField,
+                                     moduleOfVerticalField }) {
 
-        if ((startLetterCoord === targetLetterCoord) ||
-            (startNumberCoord === targetNumberCoord)) {
-            return true
-        }
-
-        return false
+        return startLetterCoord === targetLetterCoord || startNumberCoord === targetNumberCoord
     }
 
-    function isPossibleMoveForElephant([startLetterCoord, startNumberCoord], [targetLetterCoord, targetNumberCoord], [moduleOfGorizontalField, moduleOfVerticalField]) {
+    function isPossibleMoveForElephant({ startLetterCoord, 
+                                         startNumberCoord, 
+                                         targetLetterCoord,
+                                         targetNumberCoord,
+                                         moduleOfGorizontalField,
+                                         moduleOfVerticalField }) {
 
-        if (moduleOfGorizontalField === moduleOfVerticalField) {
-            return true
-        }
-
-        return false
+        return moduleOfGorizontalField === moduleOfVerticalField
     }
 
-    function isPossibleMoveForHorse([startLetterCoord, startNumberCoord], [targetLetterCoord, targetNumberCoord], [moduleOfGorizontalField, moduleOfVerticalField]) {
+    function isPossibleMoveForHorse({ startLetterCoord, 
+                                      startNumberCoord, 
+                                      targetLetterCoord,
+                                      targetNumberCoord,
+                                      moduleOfGorizontalField,
+                                      moduleOfVerticalField }) {
 
-        if ((moduleOfVerticalField === 1 && moduleOfGorizontalField === 2) ||
-            (moduleOfVerticalField === 2 && moduleOfGorizontalField === 1)) {
-            return true
-        }
-
-        return false
+        return (moduleOfVerticalField === 1 && moduleOfGorizontalField === 2) ||
+               (moduleOfVerticalField === 2 && moduleOfGorizontalField === 1)
     }
 
     function validatePlaceCoord([letterCoord, numberCoord]) {
@@ -114,11 +134,10 @@
 
         if (!regexLetter.test(letterCoord) || !regexNumber.test(numberCoord)) {
             throw new Error("нет такого поля на доске")
-            return
         }
     }
 
-    console.log(isTurnPossible("pawn", "a8", "c6"))
+    console.log(isTurnPossible("pawn", "a7", "A8"))
 
 </script>
 
