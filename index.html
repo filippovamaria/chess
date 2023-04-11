@@ -53,18 +53,13 @@
             targetLetterCoord,
             targetNumberCoord: Number(targetNumberCoord),
             moduleOfGorizontalField: Math.abs(alphabet[startLetterCoord] - alphabet[targetLetterCoord]),
-            moduleOfVerticalField: Math.abs(alphabet[startLetterCoord] - alphabet[targetLetterCoord])
+            moduleOfVerticalField: Math.abs(startNumberCoord - targetNumberCoord)
         }
 
         return isMovePossible(possibleMoveCalculations)
     }
 
-    function isPossibleMoveForPawn({ startLetterCoord, 
-                                     startNumberCoord, 
-                                     targetLetterCoord,
-                                     targetNumberCoord,
-                                     moduleOfGorizontalField,
-                                     moduleOfVerticalField }) {
+    function isPossibleMoveForPawn({ startLetterCoord, startNumberCoord, targetLetterCoord, targetNumberCoord}) {
 
         const possibleMoveForwardByNumberCoord = startNumberCoord + 1
 
@@ -75,57 +70,31 @@
         return possibleMoveForwardByNumberCoord === targetNumberCoord && startLetterCoord === targetLetterCoord
     }
 
-    function isPossibleMoveForKing({ startLetterCoord, 
-                                     startNumberCoord, 
-                                     targetLetterCoord,
-                                     targetNumberCoord,
-                                     moduleOfGorizontalField,
-                                     moduleOfVerticalField }) {
+    function isPossibleMoveForKing({ moduleOfGorizontalField, moduleOfVerticalField }) {
 
         const possibleDiff = [0, 1];
         return possibleDiff.includes(moduleOfGorizontalField) && possibleDiff.includes(moduleOfVerticalField)
     }
 
-    function isPossibleMoveForQueen({ startLetterCoord, 
-                                      startNumberCoord, 
-                                      targetLetterCoord,
-                                      targetNumberCoord,
-                                      moduleOfGorizontalField,
-                                      moduleOfVerticalField }) {
+    function isPossibleMoveForQueen(params) {
 
-        return isPossibleMoveForRook({ startLetterCoord, startNumberCoord, targetLetterCoord, targetNumberCoord, moduleOfGorizontalField, moduleOfVerticalField }) ||
-               isPossibleMoveForElephant({ startLetterCoord, startNumberCoord, targetLetterCoord, targetNumberCoord, moduleOfGorizontalField, moduleOfVerticalField })
+        return isPossibleMoveForRook(params) || isPossibleMoveForElephant(params)
     }
 
-    function isPossibleMoveForRook({ startLetterCoord, 
-                                     startNumberCoord, 
-                                     targetLetterCoord,
-                                     targetNumberCoord,
-                                     moduleOfGorizontalField,
-                                     moduleOfVerticalField }) {
+    function isPossibleMoveForRook({ startLetterCoord, startNumberCoord, targetLetterCoord, targetNumberCoord}) {
 
         return startLetterCoord === targetLetterCoord || startNumberCoord === targetNumberCoord
     }
 
-    function isPossibleMoveForElephant({ startLetterCoord, 
-                                         startNumberCoord, 
-                                         targetLetterCoord,
-                                         targetNumberCoord,
-                                         moduleOfGorizontalField,
-                                         moduleOfVerticalField }) {
+    function isPossibleMoveForElephant({ moduleOfGorizontalField, moduleOfVerticalField }) {
 
         return moduleOfGorizontalField === moduleOfVerticalField
     }
 
-    function isPossibleMoveForHorse({ startLetterCoord, 
-                                      startNumberCoord, 
-                                      targetLetterCoord,
-                                      targetNumberCoord,
-                                      moduleOfGorizontalField,
-                                      moduleOfVerticalField }) {
+    function isPossibleMoveForHorse({ moduleOfGorizontalField, moduleOfVerticalField }) {
 
         return (moduleOfVerticalField === 1 && moduleOfGorizontalField === 2) ||
-               (moduleOfVerticalField === 2 && moduleOfGorizontalField === 1)
+            (moduleOfVerticalField === 2 && moduleOfGorizontalField === 1)
     }
 
     function validatePlaceCoord([letterCoord, numberCoord]) {
@@ -137,7 +106,7 @@
         }
     }
 
-    console.log(isTurnPossible("pawn", "a7", "A8"))
+    console.log(isTurnPossible("queen", "a1", "b2"))
 
 </script>
 
