@@ -13,100 +13,19 @@
 </body>
 <script>
 
-    const alphabet = {
-        "a": 1,
-        "b": 2,
-        "c": 3,
-        "d": 4,
-        "e": 5,
-        "f": 6,
-        "g": 7,
-        "h": 8
+    class GameBoard {
+
+        figureLocation = [[{"a8": {"rook": black}}, {"b8": {"horse": black}}, {"c8": {"elephant": black}}, {"d8": {"king": black}}, {"e8": {"queen": black}}, {"f8": {"elephant": black}}, {"g8": {"horse": black}},{"h8": {"rook": black}}],
+                          [{"a7": {"pawn": black}}, {"b7": {"pawn": black}}, {"c7": {"pawn": black}}, {"d7": {"pawn": black}}, {"e7": {"pawn": black}}, {"f7": {"pawn": black}}, {"g7": {"pawn": black}},{"h7": {"pawn": black}}],
+                          [{"a6": ""}, {"b6": ""}, {"c6": ""}, {"d6": ""}, {"e6": ""}, {"f6": ""}, {"g6": ""},{"h6": ""}],
+                          [{"a5": ""}, {"b5": ""}, {"c5": ""}, {"d5": ""}, {"e5": ""}, {"f5": ""}, {"g5": ""},{"h5": ""}],
+                          [{"a4": ""}, {"b4": ""}, {"46": ""}, {"d4": ""}, {"e4": ""}, {"f4": ""}, {"g4": ""},{"h4": ""}],
+                          [{"a3": ""}, {"b3": ""}, {"c3": ""}, {"d3": ""}, {"e3": ""}, {"f3": ""}, {"g3": ""},{"h3": ""}],
+                          [{"a2": {"pawn": white}}, {"b2": {"pawn": white}}, {"c2": {"pawn": white}}, {"d2": {"pawn": white}}, {"e2": {"pawn": white}}, {"f2": {"pawn": white}}, {"g2": {"pawn": white}},{"h2": {"pawn": white}}],
+                          [{"a1": {"rook" : white}}, {"b1": {"horse": white}}, {"c1": {"elephant": white}}, {"d1": {"king": white}}, {"e1": {"queen": white}}, {"f1": {"elephant": white}}, {"g1": {"horse": white}},{"h1": {"rook": white}}]
+
+        ]
     }
-    const fieldsLetters = Object.keys(alphabet)
-
-    function isTurnPossible(figure, startPlaceOnBoard, targetPlaceOnBoard) {
-
-        const figureNameToCheckMovePossibilityFunctionMap = {
-            "pawn": isPossibleMoveForPawn,
-            "king": isPossibleMoveForKing,
-            "queen": isPossibleMoveForQueen,
-            "rook": isPossibleMoveForRook,
-            "elephant": isPossibleMoveForElephant,
-            "horse": isPossibleMoveForHorse
-        }
-        const [startLetterCoord, startNumberCoord] = startPlaceOnBoard.toLowerCase();
-        const [targetLetterCoord, targetNumberCoord] = targetPlaceOnBoard.toLowerCase();
-        const isMovePossible = figureNameToCheckMovePossibilityFunctionMap[figure]
-
-        validatePlaceCoord([startLetterCoord, startNumberCoord])
-        validatePlaceCoord([targetLetterCoord, targetNumberCoord])
-
-        if ((startLetterCoord === targetLetterCoord) &&
-            (startNumberCoord === targetLetterCoord)) {
-            throw new Error("нельзя не совершать ход")
-        }
-
-        const possibleMoveCalculations = {
-            startLetterCoord,
-            startNumberCoord: Number(startNumberCoord),
-            targetLetterCoord,
-            targetNumberCoord: Number(targetNumberCoord),
-            moduleOfGorizontalField: Math.abs(alphabet[startLetterCoord] - alphabet[targetLetterCoord]),
-            moduleOfVerticalField: Math.abs(startNumberCoord - targetNumberCoord)
-        }
-
-        return isMovePossible(possibleMoveCalculations)
-    }
-
-    function isPossibleMoveForPawn({ startLetterCoord, startNumberCoord, targetLetterCoord, targetNumberCoord}) {
-
-        const possibleMoveForwardByNumberCoord = startNumberCoord + 1
-
-        if (startNumberCoord === 8) {
-            return false
-        }
-
-        return possibleMoveForwardByNumberCoord === targetNumberCoord && startLetterCoord === targetLetterCoord
-    }
-
-    function isPossibleMoveForKing({ moduleOfGorizontalField, moduleOfVerticalField }) {
-
-        const possibleDiff = [0, 1];
-        return possibleDiff.includes(moduleOfGorizontalField) && possibleDiff.includes(moduleOfVerticalField)
-    }
-
-    function isPossibleMoveForQueen(params) {
-
-        return isPossibleMoveForRook(params) || isPossibleMoveForElephant(params)
-    }
-
-    function isPossibleMoveForRook({ startLetterCoord, startNumberCoord, targetLetterCoord, targetNumberCoord}) {
-
-        return startLetterCoord === targetLetterCoord || startNumberCoord === targetNumberCoord
-    }
-
-    function isPossibleMoveForElephant({ moduleOfGorizontalField, moduleOfVerticalField }) {
-
-        return moduleOfGorizontalField === moduleOfVerticalField
-    }
-
-    function isPossibleMoveForHorse({ moduleOfGorizontalField, moduleOfVerticalField }) {
-
-        return (moduleOfVerticalField === 1 && moduleOfGorizontalField === 2) ||
-            (moduleOfVerticalField === 2 && moduleOfGorizontalField === 1)
-    }
-
-    function validatePlaceCoord([letterCoord, numberCoord]) {
-        const regexLetter = new RegExp('[a-h]');
-        const regexNumber = new RegExp('[1-8]');
-
-        if (!regexLetter.test(letterCoord) || !regexNumber.test(numberCoord)) {
-            throw new Error("нет такого поля на доске")
-        }
-    }
-
-    console.log(isTurnPossible("queen", "a1", "b2"))
 
 </script>
 
